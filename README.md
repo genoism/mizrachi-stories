@@ -6,11 +6,11 @@ This site is **not affiliated** with the channel, Rabbi Yosef Mizrachi, or Divin
 
 ## Inclusion rule
 
-A comment is included if the writer credits Rabbi Yosef Mizrachi (his videos, lectures, teachings, or channel) as a cause or meaningful part of their change: leaving a previous religion, becoming religious as a Jew, coming to believe in God, or growing closer to Hashem because of him. Mild credit counts when it is clear (for example, “your videos brought me back to Torah,” “he brought me closer to HaShem”).
+A comment is included if the writer credits Rabbi Yosef Mizrachi (his videos, lectures, teachings, or channel) as a cause or meaningful part of their change: leaving a previous religion, becoming religious as a Jew, coming to believe in God, growing closer to Hashem because of him, or growing in Torah learning or observance because of his lectures or videos. Mild credit counts when it is clear (for example, “your videos brought me back to Torah,” “he brought me closer to HaShem,” “I’ve grown so much in my Torah learning, thanks to your lectures”).
 
-“Changed my life” said to or about Rabbi Mizrachi or his videos implies credit and is included even if the writer does not name one of those change types; the closest category is used.
+“Changed my life” said to or about Rabbi Mizrachi or his videos implies credit and is included even if the writer does not name one of those change types; the closest category is used. Growing in Torah learning or observance credited to his lectures or videos also counts, similar to growing closer to Hashem.
 
-Identity statements without that credit, comments that mainly agree with a point in the video, political or polemical remarks, credit to someone else (including other rabbis, or a friend’s story), and anything odd or unclear are left out. When in doubt, the comment is excluded, except that a clear first-person “changed my life” about him, or “closer to Hashem” because of him, is enough to include.
+Identity statements without that credit — including bare identity plus “I listen to your lectures,” conversions that are not attributed to him, and requests or aspirations — are left out, as are comments that mainly agree with a point in the video, political or polemical remarks, credit to someone else (including other rabbis, or a friend’s story), and anything odd or unclear. When in doubt, the comment is excluded, except that a clear first-person “changed my life” about him, “closer to Hashem” because of him, or growth in Torah learning or observance credited to his lectures or videos, is enough to include.
 
 ## What’s here
 
