@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stories from the Comments</title>
+  <meta name="description" content="An independent collection of public YouTube comments: personal stories of leaving another religion, becoming religious, or coming to believe in God.">
+  <meta name="robots" content="index,follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f7f1e6;
+      --paper-deep: #efe6d6;
+      --card: #fffaf2;
+      --ink: #2b241c;
+      --muted: #6d6154;
+      --rule: #e2d6c6;
+      --accent: #8b4a2f;
+      --accent-soft: #f0e0d4;
+      --shadow: 0 1px 2px rgba(60, 40, 20, 0.04), 0 10px 28px rgba(60, 40, 20, 0.06);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1200px 500px at 50% -10%, #fffdf8 0%, transparent 60%),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      font-size: 17px;
+      line-height: 1.55;
+      min-height: 100vh;
+    }
+    .wrap {
+      width: min(780px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 4.5rem 0 5rem;
+    }
+    header.intro {
+      text-align: center;
+      margin-bottom: 2.75rem;
+    }
+    .eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 0 0 1rem;
+    }
+    h1 {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      line-height: 1.05;
+      margin: 0 0 1.25rem;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      margin: 0 auto;
+      max-width: 38rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 0.85rem 0 0.9rem;
+      background: linear-gradient(to bottom, rgba(247,241,230,0.97) 70%, rgba(247,241,230,0));
+    }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.45rem;
+    }
+    .tabs button {
+      appearance: none;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 0.42rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .tabs button:hover { border-color: #c9b8a4; color: var(--ink); }
+    .tabs button[aria-selected="true"] {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #f7f1e6;
+    }
+    .search {
+      position: relative;
+      width: min(100%, 420px);
+      margin: 0 auto;
+    }
+    .search input {
+      width: 100%;
+      border: 1px solid var(--rule);
+      background: var(--card);
+      border-radius: 999px;
+      padding: 0.65rem 1rem 0.65rem 2.4rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--ink);
+      outline: none;
+    }
+    .search input:focus { border-color: #c4a48a; box-shadow: 0 0 0 3px var(--accent-soft); }
+    .search svg {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--muted);
+      fill: none;
+      pointer-events: none;
+    }
+    .count {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin: 0 0 1.4rem;
+    }
+    .cards { display: flex; flex-direction: column; gap: 1.15rem; }
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--card);
+      border: 1px solid rgba(226, 214, 198, 0.9);
+      border-radius: 18px;
+      padding: 1.55rem 1.6rem 1.3rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    a.card:hover, a.card:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(60, 40, 20, 0.1);
+      border-color: #d3c0aa;
+      outline: none;
+    }
+    .cat {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 0 0 0.85rem;
+    }
+    blockquote {
+      margin: 0;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.25rem, 2.6vw, 1.5rem);
+      font-weight: 500;
+      font-style: italic;
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.75rem;
+      margin-top: 1.15rem;
+      padding-top: 0.95rem;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .meta .author { color: var(--ink); font-weight: 600; }
+    .meta .video { flex-basis: 100%; font-style: italic; }
+    .empty, .error {
+      text-align: center;
+      color: var(--muted);
+      padding: 3rem 1rem;
+    }
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+      line-height: 1.65;
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); padding-top: 3rem; }
+      a.card { padding: 1.25rem 1.15rem 1.1rem; border-radius: 14px; }
+      .tabs button { font-size: 0.75rem; padding: 0.38rem 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="intro">
+      <p class="eyebrow">An independent collection</p>
+      <h1>Stories from the comments</h1>
+      <p class="lede">
+        Public comments on Rabbi Yosef Mizrachi’s lectures, gathered independently,
+        in which people tell their own story: leaving another religion,
+        beginning to live as a religious Jew, or coming to believe in God.
+      </p>
+    </header>
+
+    <div class="controls">
+      <div class="tabs" role="tablist" aria-label="Filter by category">
+        <button type="button" role="tab" data-filter="all" aria-selected="true">All</button>
+        <button type="button" role="tab" data-filter="Left another religion" aria-selected="false">Left another religion</button>
+        <button type="button" role="tab" data-filter="Jew became religious" aria-selected="false">Became religious</button>
+        <button type="button" role="tab" data-filter="Jew came to believe in God" aria-selected="false">Came to believe in God</button>
+      </div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="search" id="q" placeholder="Search stories, authors, or video titles" aria-label="Search stories">
+      </div>
+    </div>
+
+    <p class="count" id="count"></p>
+    <div class="cards" id="cards">
+      <p class="empty">Loading stories…</p>
+    </div>
+
+    <footer>
+      These quotes are public YouTube comments, collected independently.
+      This site is not affiliated with Rabbi Yosef Mizrachi, his channel, or Divine Information.
+      Each card opens the original comment on YouTube.
+    </footer>
+  </div>
+
+  <script>
+    const cardsEl = document.getElementById("cards");
+    const countEl = document.getElementById("count");
+    const searchEl = document.getElementById("q");
+    let stories = [];
+    let filter = "all";
+    let query = "";
+
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function visible() {
+      const q = query.trim().toLowerCase();
+      return stories.filter((s) => {
+        if (filter !== "all" && s.category !== filter) return false;
+        if (!q) return true;
+        const hay = [s.text, s.author, s.video_title, s.category, s.date].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    function render() {
+      const list = visible();
+      const total = stories.length;
+      if (!list.length) {
+        cardsEl.innerHTML = `<p class="empty">No stories match that filter.</p>`;
+        countEl.textContent = total ? `Showing 0 of ${total}` : "";
+        return;
+      }
+      countEl.textContent = list.length === total
+        ? `${total} ${total === 1 ? "story" : "stories"}`
+        : `Showing ${list.length} of ${total}`;
+      cardsEl.innerHTML = list.map((s) => {
+        const text = escapeHtml(s.text).replaceAll("\n", "<br>");
+        const date = s.date ? `<span>${escapeHtml(s.date)}</span>` : "";
+        const likes = (s.likes || s.likes === 0) ? `<span>${escapeHtml(s.likes)} likes</span>` : "";
+        return `<a class="card" href="${escapeHtml(s.link)}" target="_blank" rel="noopener noreferrer">
+          <div class="cat">${escapeHtml(s.category)}</div>
+          <blockquote>${text}</blockquote>
+          <div class="meta">
+            <span class="author">${escapeHtml(s.author)}</span>
+            ${date}
+            ${likes}
+            <span class="video">${escapeHtml(s.video_title)}</span>
+          </div>
+        </a>`;
+      }).join("");
+    }
+
+    document.querySelectorAll(".tabs button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filter = btn.dataset.filter;
+        document.querySelectorAll(".tabs button").forEach((b) => {
+          b.setAttribute("aria-selected", b === btn ? "true" : "false");
+        });
+        render();
+      });
+    });
+    searchEl.addEventListener("input", () => {
+      query = searchEl.value;
+      render();
+    });
+
+    fetch("./stories.json")
+      .then((r) => {
+        if (!r.ok) throw new Error("Could not load stories.json");
+        return r.json();
+      })
+      .then((data) => {
+        stories = Array.isArray(data) ? data : (data.stories || []);
+        render();
+      })
+      .catch((err) => {
+        cardsEl.innerHTML = `<p class="error">The stories could not be loaded. ${escapeHtml(err.message)}</p>`;
+      });
+  </script>
+</body>
+</html>
