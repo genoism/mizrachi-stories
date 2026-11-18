@@ -58,6 +58,22 @@
       font-size: 1.08rem;
       line-height: 1.7;
     }
+    .share {
+      margin: 1.05rem 0 0;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+    .share a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(139, 74, 47, 0.35);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 1px;
+    }
+    .share a:hover {
+      color: var(--ink);
+      text-decoration-color: var(--accent);
+    }
     .nobr { white-space: nowrap; }
     .controls {
       display: flex;
@@ -172,7 +188,7 @@
       text-underline-offset: 0.18em;
     }
     .orig-toggle:hover, .expand-btn:hover { color: var(--ink); }
-    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .meta a.video:focus-visible, .tabs button:focus-visible {
+    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .meta a.video:focus-visible, .tabs button:focus-visible, .share a:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
@@ -202,24 +218,26 @@
     .meta {
       display: flex;
       flex-wrap: nowrap;
-      align-items: center;
+      align-items: baseline;
       gap: 0.35rem 0.75rem;
       margin-top: 1.15rem;
       padding-top: 0.95rem;
       border-top: 1px solid var(--rule);
       color: var(--muted);
       font-size: 0.9rem;
+      line-height: 1.45;
       min-width: 0;
     }
-    .meta .who {
-      display: inline-flex;
-      flex-wrap: nowrap;
-      align-items: baseline;
-      gap: 0.35rem 0.75rem;
-      flex: 0 1 auto;
-      min-width: 0;
+    .meta .author {
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+      flex: 0 0 auto;
     }
-    .meta .author { color: var(--ink); font-weight: 600; }
+    .meta .date {
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
     .meta a.video {
       flex: 1 1 auto;
       min-width: 0;
@@ -239,6 +257,7 @@
     .meta .like-btn {
       flex: 0 0 auto;
       margin-left: auto;
+      align-self: baseline;
     }
     .like-btn {
       appearance: none;
@@ -287,25 +306,33 @@
     @media (max-width: 640px) {
       .meta {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         grid-template-areas:
-          "who like"
-          "title like";
-        align-items: center;
+          "author title like"
+          ".      date  .";
+        align-items: baseline;
         column-gap: 0.75rem;
-        row-gap: 0.3rem;
+        row-gap: 0.15rem;
       }
-      .meta .who { grid-area: who; }
+      .meta .author { grid-area: author; }
+      .meta .date { grid-area: date; }
       .meta a.video { grid-area: title; }
-      .meta .like-btn { grid-area: like; margin-left: 0; align-self: center; }
+      .meta .like-btn { grid-area: like; margin-left: 0; align-self: baseline; }
     }
     @media (max-width: 400px) {
       .meta {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         grid-template-areas:
-          "who"
+          "author"
           "title"
+          "date"
           "like";
+        row-gap: 0.25rem;
+      }
+      .meta .author {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .meta .like-btn { justify-self: start; }
     }
@@ -322,6 +349,9 @@
       <h1>Lives Changed</h1>
       <p class="lede">
         Real stories from people whom <span class="nobr">Rabbi Yosef Mizrachi</span> has brought back to Hashem.
+      </p>
+      <p class="share">
+        <a href="https://forms.gle/hSb4y6Kuzu4DGxyJ9" target="_blank" rel="noopener">Share your story</a>
       </p>
     </header>
 
@@ -579,19 +609,16 @@
 
         const meta = document.createElement("div");
         meta.className = "meta";
-        const who = document.createElement("span");
-        who.className = "who";
         const author = document.createElement("span");
         author.className = "author";
         author.textContent = s.author || "";
-        who.appendChild(author);
+        meta.appendChild(author);
         if (s.date) {
           const date = document.createElement("span");
           date.className = "date";
           date.textContent = formatCardDate(s.date);
-          who.appendChild(date);
+          meta.appendChild(date);
         }
-        meta.appendChild(who);
         if (s.video_title) {
           const video = document.createElement("a");
           video.className = "video";
