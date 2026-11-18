@@ -69,32 +69,6 @@
       padding: 0.85rem 0 0.9rem;
       background: linear-gradient(to bottom, rgba(247,241,230,0.97) 70%, rgba(247,241,230,0));
     }
-    .tabs {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.45rem;
-    }
-    .tabs button {
-      appearance: none;
-      border: 1px solid var(--rule);
-      background: transparent;
-      color: var(--muted);
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-      padding: 0.42rem 0.85rem;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-    }
-    .tabs button:hover { border-color: #c9b8a4; color: var(--ink); }
-    .tabs button[aria-selected="true"] {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: #f7f1e6;
-    }
     .search {
       position: relative;
       width: min(100%, 420px);
@@ -166,7 +140,7 @@
       text-underline-offset: 0.18em;
     }
     .orig-toggle:hover, .expand-btn:hover { color: var(--ink); }
-    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .watch:focus-visible, .tabs button:focus-visible {
+    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .watch:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
@@ -268,7 +242,6 @@
     @media (max-width: 560px) {
       .wrap { width: calc(100% - 28px); padding-top: 3rem; }
       article.card { padding: 1.25rem 1.15rem 1.1rem; border-radius: 14px; }
-      .tabs button { font-size: 0.75rem; padding: 0.38rem 0.7rem; }
     }
   </style>
 </head>
@@ -282,12 +255,6 @@
     </header>
 
     <div class="controls">
-      <div class="tabs" role="tablist" aria-label="Filter by category">
-        <button type="button" role="tab" data-filter="all" aria-selected="true">All</button>
-        <button type="button" role="tab" data-filter="Left another religion" aria-selected="false">Left another religion</button>
-        <button type="button" role="tab" data-filter="Jew became religious" aria-selected="false">Became religious</button>
-        <button type="button" role="tab" data-filter="Jew came to believe in God" aria-selected="false">Came to believe in God</button>
-      </div>
       <div class="search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke-width="2" stroke-linecap="round"/></svg>
         <input type="search" id="q" placeholder="Search stories, authors, or video titles" aria-label="Search stories">
@@ -315,7 +282,6 @@
     const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.1 20.3s-7.2-4.5-9.6-8.6C.6 8.8 1.2 5.1 4.4 3.6c2.3-1.1 5-.4 6.5 1.8 1.5-2.2 4.2-2.9 6.5-1.8 3.2 1.5 3.8 5.2 1.9 8.1-2.4 4.1-9.6 8.6-9.6 8.6z"/></svg>';
 
     let stories = [];
-    let filter = "all";
     let query = "";
 
     function escapeHtml(s) {
@@ -371,7 +337,6 @@
     function visible() {
       const q = query.trim().toLowerCase();
       return stories.filter((s) => {
-        if (filter !== "all" && s.category !== filter) return false;
         if (!q) return true;
         const hay = [
           s.text,
@@ -417,7 +382,7 @@
       const list = visible();
       const total = stories.length;
       if (!list.length) {
-        cardsEl.innerHTML = `<p class="empty">No stories match that filter.</p>`;
+        cardsEl.innerHTML = `<p class="empty">No stories match that search.</p>`;
         countEl.textContent = total ? `Showing 0 of ${total}` : "";
         return;
       }
@@ -572,15 +537,6 @@
       });
     });
 
-    document.querySelectorAll(".tabs button").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        filter = btn.dataset.filter;
-        document.querySelectorAll(".tabs button").forEach((b) => {
-          b.setAttribute("aria-selected", b === btn ? "true" : "false");
-        });
-        render();
-      });
-    });
     searchEl.addEventListener("input", () => {
       query = searchEl.value;
       render();
