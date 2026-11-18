@@ -60,8 +60,10 @@
     }
     .controls {
       display: flex;
-      flex-direction: column;
-      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem 1rem;
       margin-bottom: 2rem;
       position: sticky;
       top: 0;
@@ -71,8 +73,9 @@
     }
     .search {
       position: relative;
-      width: min(100%, 420px);
-      margin: 0 auto;
+      flex: 1 1 14rem;
+      min-width: min(14rem, 100%);
+      max-width: 420px;
     }
     .search input {
       width: 100%;
@@ -98,10 +101,11 @@
       pointer-events: none;
     }
     .count {
-      text-align: center;
+      flex: 0 1 auto;
+      margin: 0;
       color: var(--muted);
       font-size: 0.85rem;
-      margin: 0 0 1.4rem;
+      white-space: nowrap;
     }
     .cards { display: flex; flex-direction: column; gap: 1.15rem; }
     article.card {
@@ -267,9 +271,8 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke-width="2" stroke-linecap="round"/></svg>
         <input type="search" id="q" placeholder="Search stories or video titles" aria-label="Search stories or video titles">
       </div>
+      <p class="count" id="count"></p>
     </div>
-
-    <p class="count" id="count"></p>
     <div class="cards" id="cards">
       <p class="empty">Loading stories…</p>
     </div>
