@@ -265,7 +265,7 @@
     <div class="controls">
       <div class="search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M20 20l-3.2-3.2" stroke-width="2" stroke-linecap="round"/></svg>
-        <input type="search" id="q" placeholder="Search stories, authors, or video titles" aria-label="Search stories">
+        <input type="search" id="q" placeholder="Search stories or video titles" aria-label="Search stories or video titles">
       </div>
     </div>
 
@@ -349,10 +349,7 @@
         const hay = [
           s.text,
           s.original_text,
-          s.author,
-          s.video_title,
-          s.category,
-          s.date
+          s.video_title
         ].join(" ").toLowerCase();
         return hay.includes(q);
       });
