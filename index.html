@@ -263,30 +263,36 @@
       appearance: none;
       border: 0;
       background: none;
-      padding: 0.15rem 0.15rem 0.15rem 0;
+      position: relative;
       display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      align-items: baseline;
+      padding: 0 0 0 1.3em;
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: inherit;
       font-weight: 500;
+      line-height: inherit;
       color: var(--muted);
       cursor: pointer;
     }
     .like-btn svg {
-      width: 22px;
-      height: 22px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 1em;
+      height: 1em;
+      transform: translateY(-50%);
       fill: none;
       stroke: var(--heart);
       stroke-width: 1.7;
       stroke-linejoin: round;
       transition: fill 0.15s, transform 0.15s;
+      pointer-events: none;
     }
     .like-btn[aria-pressed="true"] svg {
       fill: var(--heart);
       stroke: var(--heart);
     }
-    .like-btn:hover svg { transform: scale(1.06); }
+    .like-btn:hover svg { transform: translateY(-50%) scale(1.06); }
     .like-btn.is-busy { cursor: default; opacity: 0.7; }
     .like-btn .like-count { min-width: 0.8em; }
     .empty, .error {

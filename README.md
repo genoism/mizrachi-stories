@@ -12,6 +12,8 @@ A comment is included if the writer credits Rabbi Yosef Mizrachi (his videos, le
 
 Identity statements without that credit — including bare identity plus “I listen to your lectures,” conversions that are not attributed to him, and requests or aspirations — are left out, as are comments that mainly agree with a point in the video, political or polemical remarks, credit to someone else (including other rabbis, or a friend’s story), and anything odd or unclear. When in doubt, the comment is excluded, except that a clear first-person “changed my life” about him, “closer to Hashem” because of him, or growth in Torah learning or observance credited to his lectures or videos, is enough to include.
 
+A comment that credits him with an awakening (“you opened my eyes”) and also describes a concrete resulting step toward deeper Torah life (for example, buying a Zohar set and Talmud in order to learn more, or starting to keep mitzvot) is included: the credit plus an action shows real change. Believing in Torah and learning to observe while only mentioning “what you teach,” without saying he caused the change (as in a comment like @luciagarcia6611), is not enough. If the journey started before the writer found him and credit goes to others, such as Aish (as in a comment like @elliotdavid3), he was a later influence, not a cause, and the comment is excluded.
+
 ## What’s here
 
 - `index.html` — typography-first static page (no build step)
