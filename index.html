@@ -850,6 +850,7 @@
         document.querySelectorAll(".tabs button").forEach((b) => {
           b.setAttribute("aria-selected", b === btn ? "true" : "false");
         });
+        if (sortMode === "random") assignRandomOrder();
         render();
       });
     });
