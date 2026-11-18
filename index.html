@@ -140,7 +140,7 @@
       text-underline-offset: 0.18em;
     }
     .orig-toggle:hover, .expand-btn:hover { color: var(--ink); }
-    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .watch:focus-visible {
+    .orig-toggle:focus-visible, .expand-btn:focus-visible, .like-btn:focus-visible, .meta a.video:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 3px;
     }
@@ -178,7 +178,23 @@
       font-size: 0.9rem;
     }
     .meta .author { color: var(--ink); font-weight: 600; }
-    .meta .video { flex-basis: 100%; font-style: italic; }
+    .meta a.video {
+      flex-basis: 100%;
+      font-style: italic;
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: rgba(139, 74, 47, 0.35);
+      text-underline-offset: 0.18em;
+      text-decoration-thickness: 1px;
+    }
+    .meta a.video:hover {
+      text-decoration-color: var(--accent);
+    }
+    .meta a.video:hover::after {
+      content: " ↗";
+      font-style: normal;
+      font-size: 0.85em;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -217,14 +233,6 @@
     .like-btn:hover svg { transform: scale(1.06); }
     .like-btn.is-busy { cursor: default; opacity: 0.7; }
     .like-btn .like-count { min-width: 0.8em; }
-    .watch {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-    }
-    .watch:hover { border-bottom-color: var(--accent); }
     .empty, .error {
       text-align: center;
       color: var(--muted);
@@ -438,8 +446,11 @@
           meta.appendChild(date);
         }
         if (s.video_title) {
-          const video = document.createElement("span");
+          const video = document.createElement("a");
           video.className = "video";
+          video.href = s.link;
+          video.target = "_blank";
+          video.rel = "noopener noreferrer";
           video.textContent = s.video_title;
           meta.appendChild(video);
         }
@@ -459,13 +470,6 @@
         const countSpan = likeBtn.querySelector(".like-count");
         actions.appendChild(likeBtn);
 
-        const watch = document.createElement("a");
-        watch.className = "watch";
-        watch.href = s.link;
-        watch.target = "_blank";
-        watch.rel = "noopener noreferrer";
-        watch.textContent = "Watch on YouTube";
-        actions.appendChild(watch);
         article.appendChild(actions);
         cardsEl.appendChild(article);
 
