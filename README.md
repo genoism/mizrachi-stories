@@ -6,9 +6,11 @@ This site is **not affiliated** with the channel, Rabbi Yosef Mizrachi, or Divin
 
 ## Inclusion rule
 
-A comment is included only if the writer explicitly credits Rabbi Yosef Mizrachi (his videos, lectures, teachings, or channel) as a cause or meaningful part of their change: leaving a previous religion, becoming religious as a Jew, or coming to believe in God. Mild credit counts when it is clear (for example, “your videos brought me back to Torah”).
+A comment is included if the writer credits Rabbi Yosef Mizrachi (his videos, lectures, teachings, or channel) as a cause or meaningful part of their change: leaving a previous religion, becoming religious as a Jew, coming to believe in God, or growing closer to Hashem because of him. Mild credit counts when it is clear (for example, “your videos brought me back to Torah,” “he brought me closer to HaShem”).
 
-Identity statements without that causal credit, comments that mainly agree with a point in the video, political or polemical remarks, and anything odd or unclear are left out. When in doubt, the comment is excluded.
+“Changed my life” said to or about Rabbi Mizrachi or his videos implies credit and is included even if the writer does not name one of those change types; the closest category is used.
+
+Identity statements without that credit, comments that mainly agree with a point in the video, political or polemical remarks, credit to someone else (including other rabbis, or a friend’s story), and anything odd or unclear are left out. When in doubt, the comment is excluded, except that a clear first-person “changed my life” about him, or “closer to Hashem” because of him, is enough to include.
 
 ## What’s here
 

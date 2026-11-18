@@ -334,6 +334,15 @@
         .replaceAll('"', "&quot;");
     }
 
+    function formatCardDate(value) {
+      const raw = String(value ?? "").trim();
+      const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})(.*)$/);
+      if (!m) return raw;
+      const formatted = `${m[2]}/${m[3]}/${m[1]}`;
+      const rest = m[4].trim();
+      return rest ? `${formatted} ${rest}` : formatted;
+    }
+
     function commentId(story) {
       try {
         return new URL(story.link).searchParams.get("lc") || "";
@@ -476,7 +485,7 @@
         if (s.date) {
           const date = document.createElement("span");
           date.className = "date";
-          date.textContent = s.date;
+          date.textContent = formatCardDate(s.date);
           who.appendChild(date);
         }
         meta.appendChild(who);
