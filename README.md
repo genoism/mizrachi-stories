@@ -1,4 +1,4 @@
-# Lives Changed
+# From Darkness to Light: Lives Changed by Rabbi Mizrachi
 
 A public, independent collection of first-person stories found in public YouTube comments on [Rabbi Yosef Mizrachi’s channel](https://www.youtube.com/@RabbiYosefMizrachi/videos).
 
