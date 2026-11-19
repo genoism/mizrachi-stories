@@ -445,6 +445,13 @@
       article.card { padding: 1.25rem 1.15rem 1.1rem; border-radius: 14px; }
       .tabs button { font-size: 0.75rem; padding: 0.38rem 0.7rem; }
     }
+
+    .infinite-sentinel {
+      height: 1px;
+      width: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
@@ -474,6 +481,7 @@
     <div class="cards" id="cards">
       <p class="empty">Loading stories…</p>
     </div>
+    <div id="infinite-sentinel" class="infinite-sentinel" hidden aria-hidden="true"></div>
 
     <footer class="site-footer">
       These quotes are public YouTube comments, collected independently.
@@ -495,9 +503,12 @@
     const LS_LIKED = "mizrachi-stories-liked-v1";
     const HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.1 20.3s-7.2-4.5-9.6-8.6C.6 8.8 1.2 5.1 4.4 3.6c2.3-1.1 5-.4 6.5 1.8 1.5-2.2 4.2-2.9 6.5-1.8 3.2 1.5 3.8 5.2 1.9 8.1-2.4 4.1-9.6 8.6-9.6 8.6z"/></svg>';
 
+    const PAGE_SIZE = 10;
+    const sentinelEl = document.getElementById("infinite-sentinel");
     let stories = [];
     let query = "";
     let sortMode = "random";
+    let shownCount = 0;
     const randomRank = new Map();
     const likeCounts = Object.create(null);
     let likesReady = false;
@@ -686,154 +697,200 @@
       btn.setAttribute("aria-expanded", "false");
     }
 
+    function measureCard(card) {
+      const quote = card.querySelector("blockquote.quote");
+      const btn = card.querySelector(".expand-btn");
+      if (quote && btn) measureClamp(quote, btn);
+    }
+
+    function scheduleMeasure(cards) {
+      const run = () => cards.forEach(measureCard);
+      requestAnimationFrame(run);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(run).catch(() => {});
+      }
+    }
+
+    function buildCard(s) {
+      const id = commentId(s);
+      const already = likedSet();
+      const article = document.createElement("article");
+      article.className = "card";
+
+      if (s.translated) {
+        const flags = document.createElement("div");
+        flags.className = "flags";
+        const mark = document.createElement("span");
+        mark.className = "translated-mark";
+        mark.textContent = "Translated";
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "orig-toggle";
+        toggle.setAttribute("aria-pressed", "false");
+        toggle.textContent = "Show original";
+        flags.append(mark, toggle);
+        article.appendChild(flags);
+      }
+
+      const quote = document.createElement("blockquote");
+      quote.className = "quote";
+      setQuoteText(quote, displayText(s, false));
+      article.appendChild(quote);
+
+      const expand = document.createElement("button");
+      expand.type = "button";
+      expand.className = "expand-btn";
+      expand.hidden = true;
+      expand.setAttribute("aria-expanded", "false");
+      expand.textContent = "Expand";
+      article.appendChild(expand);
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      const author = document.createElement("span");
+      author.className = "author";
+      author.textContent = s.author || "";
+      meta.appendChild(author);
+      if (s.date) {
+        const date = document.createElement("span");
+        date.className = "date";
+        date.textContent = formatCardDate(s.date);
+        meta.appendChild(date);
+      }
+      if (s.video_title) {
+        const video = document.createElement("a");
+        video.className = "video";
+        video.href = s.link;
+        video.target = "_blank";
+        video.rel = "noopener noreferrer";
+        video.textContent = s.video_title;
+        meta.appendChild(video);
+      }
+
+      const likeBtn = document.createElement("button");
+      likeBtn.type = "button";
+      likeBtn.className = "like-btn";
+      likeBtn.innerHTML = HEART + '<span class="like-count"></span>';
+      const liked = Boolean(id && already.has(id));
+      likeBtn.setAttribute("aria-pressed", liked ? "true" : "false");
+      likeBtn.setAttribute("aria-label", liked ? "Liked" : "Like this story");
+      if (liked) likeBtn.title = "You already liked this in this browser";
+      const countSpan = likeBtn.querySelector(".like-count");
+      meta.appendChild(likeBtn);
+
+      article.appendChild(meta);
+
+      expand.addEventListener("click", () => {
+        const open = !quote.classList.contains("is-expanded");
+        quote.classList.toggle("is-expanded", open);
+        measureClamp(quote, expand);
+      });
+
+      const origToggle = article.querySelector(".orig-toggle");
+      if (origToggle) {
+        origToggle.addEventListener("click", () => {
+          const showing = origToggle.getAttribute("aria-pressed") === "true";
+          const next = !showing;
+          origToggle.setAttribute("aria-pressed", next ? "true" : "false");
+          origToggle.textContent = next ? "Show translation" : "Show original";
+          quote.classList.remove("is-expanded");
+          setQuoteText(quote, displayText(s, next));
+          requestAnimationFrame(() => measureClamp(quote, expand));
+        });
+      }
+
+      likeBtn.addEventListener("click", async () => {
+        if (!id || likeBtn.getAttribute("aria-pressed") === "true" || likeBtn.classList.contains("is-busy")) {
+          return;
+        }
+        likeBtn.classList.add("is-busy");
+        try {
+          const value = await fetchLike("hit", id);
+          likeCounts[id] = value;
+          countSpan.textContent = String(value);
+          const set = likedSet();
+          set.add(id);
+          saveLiked(set);
+          likeBtn.setAttribute("aria-pressed", "true");
+          likeBtn.setAttribute("aria-label", "Liked");
+          likeBtn.title = "You already liked this in this browser";
+        } catch (_) {
+          // API down: leave the button available to try again; don't store a like.
+        } finally {
+          likeBtn.classList.remove("is-busy");
+        }
+      });
+
+      if (id && Object.prototype.hasOwnProperty.call(likeCounts, id)) {
+        countSpan.textContent = String(likeCounts[id]);
+      } else if (id) {
+        fetchLike("get", id)
+          .then((value) => {
+            likeCounts[id] = value;
+            countSpan.textContent = String(value);
+          })
+          .catch(() => { /* leave count blank if the API is down */ });
+      }
+
+      return article;
+    }
+
+    function syncSentinel(list) {
+      if (!sentinelEl) return;
+      sentinelEl.hidden = shownCount >= list.length;
+    }
+
+    function appendPage(list) {
+      const next = list.slice(shownCount, shownCount + PAGE_SIZE);
+      if (!next.length) {
+        syncSentinel(list);
+        return;
+      }
+      const added = next.map((s) => {
+        const card = buildCard(s);
+        cardsEl.appendChild(card);
+        return card;
+      });
+      shownCount += next.length;
+      scheduleMeasure(added);
+      syncSentinel(list);
+    }
+
+    function fillAhead(list) {
+      list = list || sortedVisible();
+      while (shownCount < list.length && sentinelEl && !sentinelEl.hidden) {
+        const rect = sentinelEl.getBoundingClientRect();
+        if (rect.top >= window.innerHeight + 600) break;
+        const before = shownCount;
+        appendPage(list);
+        if (shownCount === before) break;
+      }
+    }
+
     function render() {
       const list = sortedVisible();
       const total = stories.length;
+      shownCount = 0;
+      if (window.scrollY) window.scrollTo(0, 0);
       if (!list.length) {
         cardsEl.innerHTML = `<p class="empty">No stories match that search.</p>`;
         countEl.textContent = total ? `Showing 0 of ${total}` : "";
+        if (sentinelEl) sentinelEl.hidden = true;
         return;
       }
       countEl.textContent = list.length === total
         ? `${total} ${total === 1 ? "story" : "stories"}`
         : `Showing ${list.length} of ${total}`;
-
-      const already = likedSet();
       cardsEl.replaceChildren();
+      if (sentinelEl) sentinelEl.hidden = false;
+      appendPage(list);
+      fillAhead(list);
+    }
 
-      list.forEach((s) => {
-        const id = commentId(s);
-        const article = document.createElement("article");
-        article.className = "card";
-
-        if (s.translated) {
-          const flags = document.createElement("div");
-          flags.className = "flags";
-          const mark = document.createElement("span");
-          mark.className = "translated-mark";
-          mark.textContent = "Translated";
-          const toggle = document.createElement("button");
-          toggle.type = "button";
-          toggle.className = "orig-toggle";
-          toggle.setAttribute("aria-pressed", "false");
-          toggle.textContent = "Show original";
-          flags.append(mark, toggle);
-          article.appendChild(flags);
-        }
-
-        const quote = document.createElement("blockquote");
-        quote.className = "quote";
-        setQuoteText(quote, displayText(s, false));
-        article.appendChild(quote);
-
-        const expand = document.createElement("button");
-        expand.type = "button";
-        expand.className = "expand-btn";
-        expand.hidden = true;
-        expand.setAttribute("aria-expanded", "false");
-        expand.textContent = "Expand";
-        article.appendChild(expand);
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-        const author = document.createElement("span");
-        author.className = "author";
-        author.textContent = s.author || "";
-        meta.appendChild(author);
-        if (s.date) {
-          const date = document.createElement("span");
-          date.className = "date";
-          date.textContent = formatCardDate(s.date);
-          meta.appendChild(date);
-        }
-        if (s.video_title) {
-          const video = document.createElement("a");
-          video.className = "video";
-          video.href = s.link;
-          video.target = "_blank";
-          video.rel = "noopener noreferrer";
-          video.textContent = s.video_title;
-          meta.appendChild(video);
-        }
-
-        const likeBtn = document.createElement("button");
-        likeBtn.type = "button";
-        likeBtn.className = "like-btn";
-        likeBtn.innerHTML = HEART + '<span class="like-count"></span>';
-        const liked = Boolean(id && already.has(id));
-        likeBtn.setAttribute("aria-pressed", liked ? "true" : "false");
-        likeBtn.setAttribute("aria-label", liked ? "Liked" : "Like this story");
-        if (liked) likeBtn.title = "You already liked this in this browser";
-        const countSpan = likeBtn.querySelector(".like-count");
-        meta.appendChild(likeBtn);
-
-        article.appendChild(meta);
-        cardsEl.appendChild(article);
-
-        expand.addEventListener("click", () => {
-          const open = !quote.classList.contains("is-expanded");
-          quote.classList.toggle("is-expanded", open);
-          measureClamp(quote, expand);
-        });
-
-        const origToggle = article.querySelector(".orig-toggle");
-        if (origToggle) {
-          origToggle.addEventListener("click", () => {
-            const showing = origToggle.getAttribute("aria-pressed") === "true";
-            const next = !showing;
-            origToggle.setAttribute("aria-pressed", next ? "true" : "false");
-            origToggle.textContent = next ? "Show translation" : "Show original";
-            quote.classList.remove("is-expanded");
-            setQuoteText(quote, displayText(s, next));
-            requestAnimationFrame(() => measureClamp(quote, expand));
-          });
-        }
-
-        likeBtn.addEventListener("click", async () => {
-          if (!id || likeBtn.getAttribute("aria-pressed") === "true" || likeBtn.classList.contains("is-busy")) {
-            return;
-          }
-          likeBtn.classList.add("is-busy");
-          try {
-            const value = await fetchLike("hit", id);
-            likeCounts[id] = value;
-            countSpan.textContent = String(value);
-            const set = likedSet();
-            set.add(id);
-            saveLiked(set);
-            likeBtn.setAttribute("aria-pressed", "true");
-            likeBtn.setAttribute("aria-label", "Liked");
-            likeBtn.title = "You already liked this in this browser";
-          } catch (_) {
-            // API down: leave the button available to try again; don't store a like.
-          } finally {
-            likeBtn.classList.remove("is-busy");
-          }
-        });
-
-        if (id && Object.prototype.hasOwnProperty.call(likeCounts, id)) {
-          countSpan.textContent = String(likeCounts[id]);
-        } else if (id) {
-          fetchLike("get", id)
-            .then((value) => {
-              likeCounts[id] = value;
-              countSpan.textContent = String(value);
-            })
-            .catch(() => { /* leave count blank if the API is down */ });
-        }
-      });
-
-      const measureAll = () => {
-        cardsEl.querySelectorAll("article.card").forEach((card) => {
-          const quote = card.querySelector("blockquote.quote");
-          const btn = card.querySelector(".expand-btn");
-          if (quote && btn) measureClamp(quote, btn);
-        });
-      };
-      requestAnimationFrame(measureAll);
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(measureAll).catch(() => {});
-      }
+    if (sentinelEl && "IntersectionObserver" in window) {
+      new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) fillAhead();
+      }, { root: null, rootMargin: "600px 0px", threshold: 0 }).observe(sentinelEl);
     }
 
     window.addEventListener("resize", () => {
