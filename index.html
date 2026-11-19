@@ -105,7 +105,7 @@
     h1 {
       font-family: "Cormorant Garamond", Georgia, serif;
       font-weight: 600;
-      font-size: clamp(2.6rem, 7vw, 3.9rem);
+      font-size: clamp(2.1rem, 8.2vw, 3.9rem);
       line-height: 1.05;
       margin: 0 0 1.2rem;
       letter-spacing: -0.02em;
@@ -462,12 +462,14 @@
       pointer-events: none;
       overflow: hidden;
     }
+    .nobr-h { white-space: nowrap; }
+    @media (max-width: 359px) { .nobr-h { white-space: normal; } }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="intro">
-      <h1>From Darkness to Light: Lives Changed by Rabbi Yosef Mizrachi</h1>
+      <h1><span class="nobr-h">From Darkness to Light:</span> <span class="nobr-h">Lives Changed by</span> <span class="nobr-h">Rabbi Yosef Mizrachi</span></h1>
       <p class="lede">
         Real comments from viewers who found their way back to Hashem.
       </p>
